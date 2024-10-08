@@ -1,0 +1,26 @@
+﻿@model DMAWS_T2305M_PhamDangTung.Models.Project
+
+<h1>Edit Project</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ProjectId" />
+    <div class="form-group">
+        <label asp-for="ProjectName" class="control-label"></label>
+        <input asp-for="ProjectName" class="form-control" />
+        <span asp-validation-for="ProjectName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProjectStartDate" class="control-label"></label>
+        <input asp-for="ProjectStartDate" class="form-control" type="date" />
+        <span asp-validation-for="ProjectStartDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProjectEndDate" class="control-label"></label>
+        <input asp-for="ProjectEndDate" class="form-control" type="date" />
+        <span asp-validation-for="ProjectEndDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
