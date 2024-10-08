@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DMAWS_T2305M_PhamDangTung")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95d94b00d6961b2803b560a83ee40311f2616cf3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a24f79222c0abb225f13aca1a574ae40d05cc19d")]
 [assembly: System.Reflection.AssemblyProductAttribute("DMAWS_T2305M_PhamDangTung")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DMAWS_T2305M_PhamDangTung")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

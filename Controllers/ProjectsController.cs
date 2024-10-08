@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DMAWS_T2305M_PhamDangTung.Models; // Đảm bảo bạn đã tạo model Project
+using DMAWS_T2305M_PhamDangTung.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DMAWS_T2305M_PhamDangTung.Controllers
@@ -21,22 +23,50 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            var projects = await _context.Projects.ToListAsync();
-            return Ok(projects); // Trả về danh sách dự án
+            return await _context.Projects.ToListAsync();
+        }
+
+        // GET: api/projects/search
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Project>>> SearchProjects(string projectName, bool? isInProgress)
+        {
+            var query = _context.Projects.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(projectName))
+            {
+                query = query.Where(p => p.ProjectName.Contains(projectName));
+            }
+
+            if (isInProgress.HasValue)
+            {
+                if (isInProgress.Value)
+                {
+                    query = query.Where(p => p.ProjectEndDate == null || p.ProjectEndDate > DateTime.Now);
+                }
+                else
+                {
+                    query = query.Where(p => p.ProjectEndDate != null && p.ProjectEndDate < DateTime.Now);
+                }
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/projects/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects
+                .Include(p => p.ProjectEmployees)
+                .ThenInclude(pe => pe.Employees)
+                .FirstOrDefaultAsync(p => p.ProjectId == id);
 
             if (project == null)
             {
-                return NotFound(); // Trả về 404 nếu không tìm thấy dự án
+                return NotFound();
             }
 
-            return Ok(project); // Trả về dự án
+            return project;
         }
 
         // POST: api/projects
@@ -46,7 +76,7 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProject), new { id = project.ProjectId }, project); // Trả về 201 sau khi tạo thành công
+            return CreatedAtAction(nameof(GetProject), new { id = project.ProjectId }, project);
         }
 
         // PUT: api/projects/{id}
@@ -55,7 +85,7 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
         {
             if (id != project.ProjectId)
             {
-                return BadRequest(); // Trả về 400 nếu ID không khớp
+                return BadRequest();
             }
 
             _context.Entry(project).State = EntityState.Modified;
@@ -68,12 +98,12 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
             {
                 if (!ProjectExists(id))
                 {
-                    return NotFound(); // Trả về 404 nếu không tìm thấy dự án
+                    return NotFound();
                 }
-                throw; // Ném lại ngoại lệ nếu có lỗi
+                throw;
             }
 
-            return NoContent(); // Trả về 204 nếu cập nhật thành công
+            return NoContent();
         }
 
         // DELETE: api/projects/{id}
@@ -83,18 +113,36 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
-                return NotFound(); // Trả về 404 nếu không tìm thấy dự án
+                return NotFound();
             }
 
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Trả về 204 sau khi xóa thành công
+            return NoContent();
+        }
+
+        // GET: api/projects/{id}/employees
+        [HttpGet("{id}/employees")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetProjectEmployees(int id)
+        {
+            var project = await _context.Projects
+                .Include(p => p.ProjectEmployees)
+                .ThenInclude(pe => pe.Employees)
+                .FirstOrDefaultAsync(p => p.ProjectId == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var employees = project.ProjectEmployees.Select(pe => pe.Employees).ToList();
+            return employees;
         }
 
         private bool ProjectExists(int id)
         {
-            return _context.Projects.Any(e => e.ProjectId == id); // Kiểm tra xem dự án có tồn tại không
+            return _context.Projects.Any(e => e.ProjectId == id);
         }
     }
 }

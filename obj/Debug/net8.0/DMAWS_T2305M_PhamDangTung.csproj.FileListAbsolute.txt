@@ -133,3 +133,9 @@ C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\De
 C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\Debug\net8.0\DMAWS_T2305M_PhamDangTung.pdb
 C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\Debug\net8.0\DMAWS_T2305M_PhamDangTung.genruntimeconfig.cache
 C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\Debug\net8.0\ref\DMAWS_T2305M_PhamDangTung.dll
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\Debug\net8.0\DMAWS_T2305M_PhamDangTung.sourcelink.json
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Tung\Desktop\DMAWS_T2305M_PhamDangTung\DMAWS_T2305M_PhamDangTung\obj\Debug\net8.0\DMAWS_T2305M_PhamDangTung.MvcApplicationPartsAssemblyInfo.cs
