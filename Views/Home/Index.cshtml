@@ -91,7 +91,7 @@
             projects.forEach(project => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                            <td>${project.projectId}</td>   
+                            <td>${project.projectId}</td>
                             <td>${project.projectName}</td>
                             <td>${new Date(project.projectStartDate).toLocaleDateString()}</td>
                             <td>${project.projectEndDate ? new Date(project.projectEndDate).toLocaleDateString() : 'N/A'}</td>

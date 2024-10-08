@@ -23,7 +23,10 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects
+                .Include(p => p.ProjectEmployees)
+                .ThenInclude(pe => pe.Employees)
+                .ToListAsync();
         }
 
         // GET: api/projects/search
@@ -73,9 +76,52 @@ namespace DMAWS_T2305M_PhamDangTung.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
+            if (project == null)
+            {
+                return BadRequest("Project data is null.");
+            }
+
+            // Kiểm tra nếu có dữ liệu ProjectEmployees
+            if (project.ProjectEmployees != null && project.ProjectEmployees.Any())
+            {
+                foreach (var projectEmployee in project.ProjectEmployees)
+                {
+                    // Kiểm tra xem Employee có tồn tại không
+                    var employee = await _context.Employees.FindAsync(projectEmployee.EmployeeId);
+
+                    if (employee == null)
+                    {
+                        // Nếu nhân viên không tồn tại, tạo mới nhân viên
+                        var newEmployee = new Employee
+                        {
+                            EmployeeName = projectEmployee.Employees.EmployeeName,
+                            EmployeeDOB = projectEmployee.Employees.EmployeeDOB,
+                            EmployeeDepartment = projectEmployee.Employees.EmployeeDepartment
+                        };
+
+                        _context.Employees.Add(newEmployee);
+                        await _context.SaveChangesAsync();
+
+                        // Liên kết ProjectEmployee với nhân viên mới
+                        projectEmployee.EmployeeId = newEmployee.EmployeeId;
+                        projectEmployee.Employees = newEmployee;
+                    }
+                    else
+                    {
+                        // Nếu nhân viên đã tồn tại, liên kết ProjectEmployee với nhân viên đó
+                        projectEmployee.Employees = employee;
+                    }
+
+                    // Liên kết ProjectEmployee với dự án
+                    projectEmployee.Projects = project;
+                }
+            }
+
+            // Thêm dự án vào cơ sở dữ liệu
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
+            // Trả về kết quả với ID của dự án vừa được thêm
             return CreatedAtAction(nameof(GetProject), new { id = project.ProjectId }, project);
         }
 

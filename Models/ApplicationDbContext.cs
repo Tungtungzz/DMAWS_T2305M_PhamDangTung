@@ -14,6 +14,9 @@ namespace DMAWS_T2305M_PhamDangTung.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Project>()
+            .Property(p => p.ProjectId)
+            .ValueGeneratedNever();
             // Cấu hình khoá chính cho bảng trung gian ProjectEmployee
             modelBuilder.Entity<ProjectEmployee>()
                 .HasKey(pe => new { pe.EmployeeId, pe.ProjectId });
